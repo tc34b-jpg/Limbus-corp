@@ -162,7 +162,7 @@
 <div class="skills-container" id="main-skills"></div>
 
 <script>
-const p = { hp: 300, max: 300, sp: 45, ego: 25 }; 
+const p = { hp: 300, max: 300, sp: 45, ego: 50 }; 
 const e = { hp: 5000, max: 5000, burn: 0, bleed: 0, sinking: 0 };
 let selectedSkill = null;
 let currentHandIdx = -1;
@@ -190,7 +190,7 @@ const specials = {
 const abnoPool = [
     { n: "Sentence of Sins", b: 6, p: 6, c: 2 },
     { n: "Punishment", b: 8, p: 4, c: 2 },
-    { n: "The Last Confession", b: 4, p: 4, c: 9 }
+    { n: "The Last Confession", b: 4, p: 4, c: 10 }
 ];
 let curE = abnoPool[0];
 
@@ -223,9 +223,9 @@ function updatePredict() {
     const eExp = curE.b + (curE.p * curE.c * 0.5);
     const diff = pExp - eExp;
     
-    if(diff > 4) { pr.innerText = "DOMINANTE"; pr.style.color = "var(--eva)"; }
-    else if(diff < -2) { pr.innerText = "ARRISCADO"; pr.style.color = "var(--red)"; }
-    else { pr.innerText = "EQUILIBRADO"; pr.style.color = "var(--gold)"; }
+    if(diff > 4) { pr.innerText = "Dominat"; pr.style.color = "var(--eva)"; }
+    else if(diff < -2) { pr.innerText = "Struggling"; pr.style.color = "var(--red)"; }
+    else { pr.innerText = "Neutral"; pr.style.color = "var(--gold)"; }
 }
 
 function selectSpecial(key) {
@@ -259,7 +259,7 @@ async function startClash() {
         overlay.style.transition = 'opacity 0.8s ease-out'; overlay.style.opacity = '0';
         e.hp -= 500; 
         setTimeout(() => document.body.classList.remove('shake'), 500);
-        log("E.G.O: DANO MASSIVO!");
+        log("E.G.O: EFFECTIVE DAMAGE!");
     } else if(s.type === 'heal') {
         if(p.ego >= 40) { p.ego -= 40; p.hp = Math.min(p.max, p.hp+60); p.sp = Math.min(45, p.sp+20); log("SISTEMA REPARADO"); }
         else { log("EGO INSUFICIENTE!"); }
@@ -284,7 +284,7 @@ async function startClash() {
     }
     
     selectedSkill = null; currentHandIdx = -1;
-    if(e.hp <= 0) { alert("ABNORMALIDADE SUPRIMIDA!"); location.reload(); }
+    if(e.hp <= 0) { alert("ABNORMALIDADE DEFFEATED!"); location.reload(); }
     else { 
         curE = abnoPool[Math.floor(Math.random() * abnoPool.length)]; 
         updateEnemyIntent(); updateStats(); 
