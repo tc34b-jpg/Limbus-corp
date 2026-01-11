@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>ABYSSUS - JUDGEMENT V58 (E.G.O CLASH EDITION)</title>
+    <title>ABYSSUS - DANTE'S JUDGEMENT</title>
     <style>
         :root { 
             --bg: #050505; --card: #121214; --red: #ff4444; --blue: #4488ff; 
@@ -16,7 +16,6 @@
             height: 100vh; transition: background 0.1s; 
         }
 
-        /* --- TELA DE INTRO --- */
         #intro-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100vh;
@@ -37,7 +36,6 @@
         }
         .btn-access:hover { background: var(--ego); color: #000; box-shadow: 0 0 20px var(--ego); }
 
-        /* --- INTENÇÃO DA ABNO --- */
         #e-skill-display {
             background: rgba(255, 0, 0, 0.1);
             border: 1px solid var(--red);
@@ -51,7 +49,6 @@
         }
         @keyframes pulseRed { 0%, 100% { border-color: var(--red); } 50% { border-color: #880000; } }
 
-        /* --- INTERFACE --- */
         .shake { animation: shakeEffect 0.5s cubic-bezier(.36,.07,.19,.97) both; }
         @keyframes shakeEffect {
             10%, 90% { transform: translate3d(-2px, 0, 0); }
@@ -65,26 +62,36 @@
         .b-burn { background: rgba(255,136,0,0.1); border-color: var(--burn); color: var(--burn); }
         .b-bleed { background: rgba(136,0,0,0.1); border-color: var(--bleed); color: var(--bleed); }
         .b-sinking { background: rgba(68,0,255,0.1); border-color: var(--sinking); color: var(--sinking); }
+        
         #sidebar { position: fixed; left: -310px; top: 0; width: 300px; height: 100%; background: rgba(10,10,10,0.98); border-right: 2px solid #333; transition: 0.3s; padding: 30px; z-index: 1000; }
         #sidebar.open { left: 0; border-color: var(--ego); }
         .toggle-btn { position: absolute; right: -50px; top: 20px; background: #111; border: 1px solid #444; color: var(--ego); cursor: pointer; padding: 12px; border-radius: 0 8px 8px 0; font-weight: bold; }
+
         .arena { display: flex; width: 95%; max-width: 1200px; justify-content: space-between; margin: 20px auto; align-items: flex-end; }
         .card { background: var(--card); border: 2px solid #222; width: 250px; padding: 15px; border-radius: 12px; position: relative; }
         .bar-container { background: #000; height: 10px; border: 1px solid #333; margin: 6px 0; border-radius: 5px; overflow: hidden; }
         .bar-fill { height: 100%; transition: width 0.5s; }
         .hp { background: var(--red); } .sp { background: var(--blue); } .ego-bar { background: var(--ego); box-shadow: 0 0 10px var(--ego); }
+        
         .prob-display { color: var(--gold); font-size: 10px; font-weight: bold; margin-top: 8px; border-top: 1px solid #222; padding-top: 5px; }
         .abno-container { position: relative; width: 200px; height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: abnoFloat 4s ease-in-out infinite; margin-bottom: 10px; }
         .abno-body { width: 80px; height: 120px; background: linear-gradient(135deg, #2a1010, #1a0505); border: 3px solid #4a1a1a; border-radius: 40% 40% 20% 20%; position: relative; z-index: 2; box-shadow: 0 0 20px rgba(255, 0, 0, 0.2); }
         .abno-eye-socket { width: 40px; height: 40px; background: #000; border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; border: 2px solid var(--red); overflow: hidden; box-shadow: inset 0 0 10px #f00; }
         .abno-pupil { width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 15px #fff; animation: franticLook 5s infinite; }
+        .abno-arm { position: absolute; width: 100px; height: 8px; background: repeating-linear-gradient(90deg, #333, #333 5px, #555 5px, #555 10px); top: 50px; border-radius: 5px; z-index: 1; }
+        .arm-left { left: -60px; transform: rotate(-20deg); animation: armSwayL 3s ease-in-out infinite; }
+        .arm-right { right: -60px; transform: rotate(20deg); animation: armSwayR 3s ease-in-out infinite; }
+        .scale-plate { position: absolute; bottom: -20px; width: 40px; height: 4px; background: var(--gold); border-radius: 50%; box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3); }
+
         .clash-info { flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; }
         .prediction-box { font-weight: 900; font-size: 18px; margin-bottom: 5px; height: 25px; text-transform: uppercase; }
         .val-main { font-size: 80px; font-weight: 900; line-height: 0.8; margin: 15px 0; }
         #terminal { width: 450px; height: 60px; background: rgba(0,0,0,0.4); border-left: 4px solid var(--gold); padding: 8px; font-size: 11px; overflow-y: auto; color: #888; border-radius: 4px; margin-top: 10px; }
+        
         .skills-container { position: fixed; bottom: 30px; width: 100%; display: flex; justify-content: center; gap: 20px; }
         .s-btn { background: #1a1a1c; border: 1px solid #333; color: #fff; padding: 18px; cursor: pointer; width: 200px; border-radius: 8px; text-align: left; transition: 0.2s; }
         .s-btn.selected { border-color: var(--gold); background: #2a2200; transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.6); }
+        
         .coin-row { display: flex; gap: 4px; min-height: 25px; justify-content: center; }
         .coin { width: 18px; height: 18px; border-radius: 50%; border: 1px solid #444; background: #111; transform: scale(0); transition: 0.2s; }
         .coin.show { transform: scale(1); }
@@ -110,7 +117,7 @@
     <button class="menu-btn" onclick="selectSpecial('cnt')"><b style="color:var(--cnt)">Counter</b><br><small>Multiplicador x4</small></button>
     <button class="menu-btn" onclick="selectSpecial('def')"><b style="color:var(--def)">Guard made for tech</b><br><small style="color:var(--ego)">+10 SP | +15% EGO</small></button>
     <button id="heal-btn" class="menu-btn" onclick="selectSpecial('heal')"><b style="color:cyan">Repair of control</b><br><small>Cost: 40% EGO power</small></button>
-    <button id="ego-menu-btn" class="menu-btn" style="color:var(--ego); border-color:var(--ego)" onclick="selectSpecial('ego')" disabled><b>Use E.G.O (100%)</b><br><small>Clashable | Heavy Dmg</small></button>
+    <button id="ego-menu-btn" class="menu-btn" style="color:var(--ego); border-color:var(--ego)" onclick="selectSpecial('ego')" disabled><b>Use E.G.O (100%)</b><br><small>Loss 50% of your SP</small></button>
 </div>
 
 <div class="arena">
@@ -140,7 +147,10 @@
             <b id="e-skill-name" style="color:var(--red)">---</b><br>
             <span id="e-skill-power" style="font-size:10px">0 + 0 [x0]</span>
         </div>
+
         <div class="abno-container">
+            <div class="abno-arm arm-left"><div class="scale-plate"></div></div>
+            <div class="abno-arm arm-right"><div class="scale-plate"></div></div>
             <div class="abno-body"><div class="abno-eye-socket"><div class="abno-pupil"></div></div></div>
         </div>
         <div class="card">
@@ -155,7 +165,7 @@
 <div class="skills-container" id="main-skills"></div>
 
 <script>
-const p = { hp: 300, max: 300, sp: 45, ego: 0 };
+const p = { hp: 300, max: 300, sp: 45, ego: 1 };
 const e = { hp: 5000, max: 5000, burn: 0, bleed: 0, sinking: 0 };
 let selectedSkill = null;
 let currentHandIdx = -1;
@@ -163,8 +173,12 @@ let currentHandIdx = -1;
 const fullDeck = [
     { n: "Thrice-Baked", b: 4, p: 4, c: 3, st: 'burn', val: 6 },
     { n: "Dual Laceration", b: 6, p: 5, c: 2, st: 'bleed', val: 8 },
-    { n: "Abyssal Quad-Step", b: 3, p: 3, c: 4, st: 'sinking', val: 10 }
+    { n: "Abyssal Quad-Step", b: 3, p: 3, c: 4, st: 'sinking', val: 10 },
+    { n: "Wildfire Burst", b: 20, p: 10, c: 1, st: 'burn', val: 20 },
+    { n: "Thrice-Cut Vein", b: 5, p: 3, c: 3, st: 'bleed', val: 5 },
+    { n: "Mental Breakdown", b: 8, p: 6, c: 4, st: 'sinking', val: 30 }
 ];
+
 let activeHand = [fullDeck[0], fullDeck[1], fullDeck[2]];
 let deckPointer = 3;
 
@@ -172,7 +186,7 @@ const specials = {
     eva: { n: "Evade", type: 'eva', b: 5, p: 12, c: 1 },
     cnt: { n: "Counter", type: 'cnt', b: 8, p: 8, c: 3 },
     def: { n: "Guard", type: 'def', b: 10, p: 5, c: 2 },
-    ego: { n: "JUDGEMENT-TIME", type: 'ego_atk', b: 30, p: 15, c: 1 }, // CLASHÁVEL AGORA
+    ego: { n: "E.G.O", type: 'ego_atk' },
     heal: { n: "Heal Life", type: 'heal' }
 };
 
@@ -183,9 +197,15 @@ const abnoPool = [
 ];
 let curE = abnoPool[0];
 
-// INTRO
-setTimeout(() => { document.getElementById('intro-loader').style.display = 'none'; document.getElementById('intro-btn').style.display = 'block'; }, 1000);
-function startApp() { document.getElementById('intro-overlay').style.transform = 'translateY(-100%)'; }
+// LOGICA DE INTRO
+setTimeout(() => {
+    document.getElementById('intro-loader').style.display = 'none';
+    document.getElementById('intro-btn').style.display = 'block';
+}, 2000);
+
+function startApp() {
+    document.getElementById('intro-overlay').style.transform = 'translateY(-100%)';
+}
 
 function log(m) {
     const l = document.getElementById('log-content');
@@ -200,16 +220,24 @@ function updateEnemyIntent() {
 function updatePredict() {
     const pr = document.getElementById('prediction');
     const btn = document.getElementById('clash-btn');
-    if(!selectedSkill) { btn.style.display = 'none'; return; }
+    if(!selectedSkill) { pr.innerText = "ESCOLHA UMA AÇÃO"; pr.style.color = "#444"; btn.style.display = 'none'; return; }
     btn.style.display = 'block';
+    if(selectedSkill.type === 'ego_atk') { pr.innerText = "Extermination"; pr.style.color = "var(--ego)"; return; }
+    
     const chance = (p.sp + 50) / 100;
     const pExp = (selectedSkill.b || 0) + ((selectedSkill.p || 0) * (selectedSkill.c || 1) * chance);
     const eExp = curE.b + (curE.p * curE.c * 0.5);
     const diff = pExp - eExp;
     
-    if(diff > 4) { pr.innerText = "DOMINANTE"; pr.style.color = "var(--eva)"; }
-    else if(diff < -2) { pr.innerText = "ARRISCADO"; pr.style.color = "var(--red)"; }
-    else { pr.innerText = "EQUILIBRADO"; pr.style.color = "var(--gold)"; }
+    if(diff > 4) { 
+        pr.innerText = "DOMINANTE"; pr.style.color = "var(--eva)"; 
+    } else if(diff < -2) { 
+        pr.innerText = "ARRISCADO"; pr.style.color = "var(--red)"; 
+    } else if(Math.abs(diff) < 0.1) { 
+        pr.innerText = "IMPASSE TOTAL"; pr.style.color = "#ff8800"; 
+    } else { 
+        pr.innerText = "EQUILIBRADO"; pr.style.color = "var(--gold)"; 
+    }
 }
 
 function selectSpecial(key) {
@@ -223,51 +251,54 @@ function renderUI() {
     activeHand.forEach((s, idx) => {
         const btn = document.createElement('button');
         btn.className = 's-btn' + (selectedSkill === s ? ' selected' : '');
-        btn.innerHTML = `<b>${s.n}</b><br>${s.b}+${s.p}[x${s.c}]`;
+        let stColor = s.st === 'burn' ? 'var(--burn)' : s.st === 'bleed' ? 'var(--red)' : 'var(--sinking)';
+        btn.innerHTML = `<small style="color:${stColor}">${s.st.toUpperCase()}</small><br><b>${s.n}</b><br>${s.b}+${s.p}[x${s.c}]`;
         btn.onclick = () => { selectedSkill = s; currentHandIdx = idx; renderUI(); updatePredict(); };
         mDiv.appendChild(btn);
     });
-}
-
-async function triggerEGOAnimation() {
-    const overlay = document.getElementById('ego-flash-overlay');
-    document.body.classList.add('shake');
-    overlay.style.transition = 'none'; overlay.style.opacity = '0.8';
-    await new Promise(r => setTimeout(r, 200));
-    overlay.style.transition = 'opacity 0.8s ease-out'; overlay.style.opacity = '0';
-    setTimeout(() => document.body.classList.remove('shake'), 500);
 }
 
 async function startClash() {
     const s = selectedSkill; const usedIdx = currentHandIdx;
     document.getElementById('clash-btn').style.display = 'none';
 
-    if(s.type === 'heal') {
-        if(p.ego >= 40) { p.ego -= 40; p.hp = Math.min(p.max, p.hp+60); log("SISTEMA REPARADO"); }
+    if(s.type === 'ego_atk') {
+        const overlay = document.getElementById('ego-flash-overlay');
+        document.body.classList.add('shake');
+        overlay.style.transition = 'none'; overlay.style.opacity = '0.8';
+        p.sp = Math.floor(p.sp / 2);
+        await new Promise(r => setTimeout(r, 150));
+        overlay.style.transition = 'opacity 0.8s ease-out'; overlay.style.opacity = '0';
+        e.hp -= 400; p.ego = 0;
+        setTimeout(() => document.body.classList.remove('shake'), 500);
+        log("E.G.O: DANO MASSIVO!");
+    } else if(s.type === 'heal') {
+        if(p.ego >= 40) { p.ego -= 40; p.hp = Math.min(p.max, p.hp+60); p.sp = Math.min(45, p.sp+20); log("SISTEMA REPARADO"); }
     } else {
         const pv = await flip(s, 'p-coins', 'p-v', p.sp, false);
         const ev = await flip(curE, 'e-coins', 'e-v', 0, true);
         
-        if(pv > ev) {
-            if(s.type === 'ego_atk') {
-                await triggerEGOAnimation(); // SÓ ATIVA SE GANHAR
-                e.hp -= 600; p.sp = Math.floor(p.sp / 2); p.ego = 0;
-                log("E.G.O EXTERMINATION!");
-            } else if(s.type === 'eva') { p.sp = Math.min(45, p.sp+25); log("DESVIO!"); }
-            else {
-                let dmg = pv * (s.type === 'cnt' ? 4 : 3);
-                e.hp -= dmg; p.sp = Math.min(45, p.sp + 20); p.ego = Math.min(100, p.ego + 30);
-                log(`DANO: ${Math.floor(dmg)}`);
-            }
-        } else {
-            p.hp -= ev; p.sp = Math.max(-45, p.sp - 25);
-            if(s.type === 'ego_atk') { p.ego = 0; log("E.G.O QUEBRADO!"); }
-            else log("DANO SOFRIDO!");
-        }
+        if(s.type === 'eva' && pv > ev) { p.sp = Math.min(45, p.sp+25); log("DESVIO PERFEITO!"); }
+        else if(s.type === 'def') { 
+            p.hp -= Math.max(0, ev - pv); p.sp = Math.min(45, p.sp + 10); p.ego = Math.min(100, p.ego + 15);
+            log(`GUARDA PERFEITA!`); 
+        } else if(pv > ev) { 
+            let dmg = pv * (s.type === 'cnt' ? 4 : 3.5);
+            if(s.st) { e[s.st] += s.val; if(s.st === 'sinking') { dmg += e.sinking; log("SINKING IMPACT!"); } }
+            e.hp -= dmg; p.sp = Math.min(45, p.sp + 20); p.ego = Math.min(100, p.ego + 35); log(`DANO: ${Math.floor(dmg)}`);
+        } else { p.hp -= ev; p.sp = Math.max(-45, p.sp - 25); log("DANO SOFRIDO!"); }
     }
 
-    if(usedIdx !== -1) { activeHand[usedIdx] = fullDeck[Math.floor(Math.random()*fullDeck.length)]; }
-    selectedSkill = null; updateEnemyIntent(); updateStats();
+    if(e.burn > 0) { e.hp -= e.burn; log(`BURN: -${e.burn} HP`); e.burn = Math.floor(e.burn * 0.7); }
+    if(usedIdx !== -1) { activeHand[usedIdx] = fullDeck[deckPointer]; deckPointer = (deckPointer + 1) % fullDeck.length; }
+    
+    selectedSkill = null; 
+    if(e.hp <= 0) { alert("ABNORMALIDADE SUPRIMIDA!"); location.reload(); }
+    else { 
+        curE = abnoPool[Math.floor(Math.random() * abnoPool.length)]; 
+        updateEnemyIntent();
+        updateStats(); 
+    }
 }
 
 async function flip(s, id, vid, sp, isEnemy) {
@@ -275,7 +306,8 @@ async function flip(s, id, vid, sp, isEnemy) {
     cont.innerHTML = ''; let power = s.b || 0; vdis.innerText = power;
     for(let i=0; i<(s.c||1); i++) {
         const c = document.createElement('div'); c.className = 'coin show flipping'; cont.appendChild(c);
-        await new Promise(r => setTimeout(r, 350)); c.classList.remove('flipping');
+        if(isEnemy && e.bleed > 0) { e.hp -= e.bleed; log(`BLEED: Inimigo sangrou ${e.bleed}!`); }
+        await new Promise(r => setTimeout(r, 400)); c.classList.remove('flipping');
         if(Math.random() < (sp+50)/100) { c.classList.add('heads'); power += s.p; }
         else c.classList.add('tails');
         vdis.innerText = power;
@@ -285,18 +317,26 @@ async function flip(s, id, vid, sp, isEnemy) {
 
 function updateStats() {
     document.getElementById('p-hp').style.width = (p.hp/p.max*100)+'%';
+    document.getElementById('p-hp-cur').innerText = Math.ceil(p.hp);
     document.getElementById('p-sp').style.width = ((p.sp+45)/90*100)+'%';
     document.getElementById('p-ego').style.width = p.ego+'%';
-    document.getElementById('p-hp-cur').innerText = Math.ceil(p.hp);
     document.getElementById('p-sp-val').innerText = p.sp;
     document.getElementById('ego-val').innerText = Math.floor(p.ego);
+    document.getElementById('prob-val').innerText = (p.sp + 50) + "%";
     document.getElementById('e-hp').style.width = (e.hp/e.max*100)+'%';
     document.getElementById('e-hp-val').innerText = Math.ceil(e.hp);
     document.getElementById('ego-menu-btn').disabled = p.ego < 100;
+    
+    const tray = document.getElementById('e-status'); tray.innerHTML = '';
+    if(e.burn > 0) tray.innerHTML += `<div class="badge b-burn">BURN:${e.burn}</div>`;
+    if(e.bleed > 0) tray.innerHTML += `<div class="badge b-bleed">BLEED:${e.bleed}</div>`;
+    if(e.sinking > 0) tray.innerHTML += `<div class="badge b-sinking">SINKING:${e.sinking}</div>`;
+
     renderUI(); updatePredict();
 }
 
-updateEnemyIntent(); updateStats();
+updateEnemyIntent();
+updateStats();
 </script>
 </body>
 </html>
