@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>ABYSSUS - DANTE'S JUDGEMENT</title>
+    <title>Limbus Corp - DANTE'S JUDGEMENT</title>
     <style>
         :root { 
             --bg: #050505; --card: #121214; --red: #ff4444; --blue: #4488ff; 
@@ -131,7 +131,7 @@
     </div>
 
     <div class="clash-info">
-        <div id="prediction" class="prediction-box" style="color:#444">AGUARDANDO...</div>
+        <div id="prediction" class="prediction-box" style="color:#444">Wait...</div>
         <div style="display:flex; align-items:center; gap:30px">
             <div><span id="p-v" class="val-main" style="color:var(--blue)">0</span><div class="coin-row" id="p-coins"></div></div>
             <button id="clash-btn" onclick="startClash()" style="display:none; padding:12px 30px; background:var(--gold); border:none; font-weight:bold; cursor:pointer; border-radius:4px;">CLashar</button>
@@ -143,7 +143,7 @@
 
     <div style="display:flex; flex-direction:column; align-items:center">
         <div id="e-skill-display">
-            <small style="color:rgba(255,255,255,0.5)">INTENÇÃO:</small><br>
+            <small style="color:rgba(255,255,255,0.5)">Enemi atack:</small><br>
             <b id="e-skill-name" style="color:var(--red)">---</b><br>
             <span id="e-skill-power" style="font-size:10px">0 + 0 [x0]</span>
         </div>
@@ -281,7 +281,7 @@ async function startClash() {
         if(s.type === 'eva' && pv > ev) { p.sp = Math.min(45, p.sp+25); log("DESVIO PERFEITO!"); }
         else if(s.type === 'def') { 
             p.hp -= Math.max(0, ev - pv); p.sp = Math.min(45, p.sp + 10); p.ego = Math.min(100, p.ego + 15);
-            log(`GUARDA PERFEITA!`); 
+            log(`Perfect Guard!`); 
         } else if(pv > ev) { 
             let dmg = pv * (s.type === 'cnt' ? 4 : 3.5);
             if(s.st) { e[s.st] += s.val; if(s.st === 'sinking') { dmg += e.sinking; log("SINKING IMPACT!"); } }
