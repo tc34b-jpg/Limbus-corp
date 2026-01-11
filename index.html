@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>ABYSSUS - JUDGEMENT V58</title>
+    <title>ABYSSUS - JUDGEMENT V58 (INTENT SYSTEM)</title>
     <style>
         :root { 
             --bg: #050505; --card: #121214; --red: #ff4444; --blue: #4488ff; 
@@ -16,7 +16,7 @@
             height: 100vh; transition: background 0.1s; 
         }
 
-        /* --- TELA DE INTRO (SISTEMA DE ACESSO) --- */
+        /* --- TELA DE INTRO --- */
         #intro-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100vh;
@@ -37,7 +37,23 @@
         }
         .btn-access:hover { background: var(--ego); color: #000; box-shadow: 0 0 20px var(--ego); }
 
-        /* --- INTERFACE DO JOGO --- */
+        /* --- INTENÇÃO DA ABNO --- */
+        #e-skill-display {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid var(--red);
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            text-align: center;
+            min-width: 150px;
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
+            animation: pulseRed 2s infinite;
+        }
+        @keyframes pulseRed { 
+            0%, 100% { border-color: var(--red); } 50% { border-color: #880000; } 
+        }
+
+        /* --- INTERFACE --- */
         .shake { animation: shakeEffect 0.5s cubic-bezier(.36,.07,.19,.97) both; }
         @keyframes shakeEffect {
             10%, 90% { transform: translate3d(-2px, 0, 0); }
@@ -129,6 +145,12 @@
     </div>
 
     <div style="display:flex; flex-direction:column; align-items:center">
+        <div id="e-skill-display">
+            <small style="color:rgba(255,255,255,0.5)">INTENÇÃO:</small><br>
+            <b id="e-skill-name" style="color:var(--red)">---</b><br>
+            <span id="e-skill-power" style="font-size:10px">0 + 0 [x0]</span>
+        </div>
+
         <div class="abno-container">
             <div class="abno-arm arm-left"><div class="scale-plate"></div></div>
             <div class="abno-arm arm-right"><div class="scale-plate"></div></div>
@@ -138,7 +160,7 @@
             <b style="color:var(--red)">O JULGAMENTO (WAW)</b>
             <div class="bar-container"><div id="e-hp" class="bar-fill hp" style="width:100%"></div></div>
             <div class="status-tray" id="e-status"></div>
-            <div style="font-size:10px; color:#888">HP: <span id="e-hp-val">1200</span></div>
+            <div style="font-size:10px; color:#888">HP: <span id="e-hp-val">5000</span></div>
         </div>
     </div>
 </div>
@@ -162,15 +184,13 @@ const e = { hp: 5000, max: 5000, burn: 0, bleed: 0, sinking: 0 };
 let selectedSkill = null;
 let currentHandIdx = -1;
 
-// NIVELAMENTO DE PODER (SKILLS)
-// b = Base Power | p = Coin Power | c = Coins
 const fullDeck = [
-    { n: "Thrice-Baked", b: 4, p: 4, c: 3, st: 'burn', val: 6 },    // Max: 16
-    { n: "Dual Laceration", b: 6, p: 5, c: 2, st: 'bleed', val: 8 },   // Max: 16
-    { n: "Abyssal Quad-Step", b: 3, p: 3, c: 4, st: 'sinking', val: 10 },// Max: 15
-    { n: "Wildfire Burst", b: 20, p: 10, c: 1, st: 'burn', val: 20 },  // Max: 20 (Nivelado)
-    { n: "Thrice-Cut Vein", b: 5, p: 3, c: 3, st: 'bleed', val: 5 },  // Max: 14
-    { n: "Mental Breakdown", b: 8, p: 6, c: 4, st: 'sinking', val: 30 }   // Max: 20
+    { n: "Thrice-Baked", b: 4, p: 4, c: 3, st: 'burn', val: 6 },
+    { n: "Dual Laceration", b: 6, p: 5, c: 2, st: 'bleed', val: 8 },
+    { n: "Abyssal Quad-Step", b: 3, p: 3, c: 4, st: 'sinking', val: 10 },
+    { n: "Wildfire Burst", b: 20, p: 10, c: 1, st: 'burn', val: 20 },
+    { n: "Thrice-Cut Vein", b: 5, p: 3, c: 3, st: 'bleed', val: 5 },
+    { n: "Mental Breakdown", b: 8, p: 6, c: 4, st: 'sinking', val: 30 }
 ];
 
 let activeHand = [fullDeck[0], fullDeck[1], fullDeck[2]];
@@ -179,22 +199,27 @@ let deckPointer = 3;
 const specials = {
     eva: { n: "Evade", type: 'eva', b: 5, p: 12, c: 1 },
     cnt: { n: "Counter", type: 'cnt', b: 8, p: 8, c: 3 },
-    def: { n: "Guard", type: 'def', b: 10, p: 5, c: 2, spBonus: 15, egoBonus: 20 },
+    def: { n: "Guard", type: 'def', b: 10, p: 5, c: 2 },
     ego: { n: "E.G.O", type: 'ego_atk' },
     heal: { n: "Heal Life", type: 'heal' }
 };
 
-// NIVELAMENTO DA ABNORMALIDADE
 const abnoPool = [
-    { n: "SENTENÇA", b: 6, p: 6, c: 2 },     // Max: 18
-    { n: "PUNIÇÃO", b: 8, p: 4, c: 2 },      // Max: 16
-    { n: "BALANÇA TORTA", b: 4, p: 3, c: 4 } // Max: 16
+    { n: "SENTENÇA", b: 6, p: 6, c: 2 },
+    { n: "PUNIÇÃO", b: 8, p: 4, c: 2 },
+    { n: "BALANÇA TORTA", b: 4, p: 3, c: 4 }
 ];
 let curE = abnoPool[0];
 
 function log(m) {
     const l = document.getElementById('log-content');
     const d = document.createElement('div'); d.innerHTML = `> ${m}`; l.prepend(d);
+}
+
+// ATUALIZA O HUD DE INTENÇÃO DA ABNO
+function updateEnemyIntent() {
+    document.getElementById('e-skill-name').innerText = curE.n;
+    document.getElementById('e-skill-power').innerText = `${curE.b} + ${curE.p} [x${curE.c}]`;
 }
 
 function updatePredict() {
@@ -204,7 +229,6 @@ function updatePredict() {
     btn.style.display = 'block';
     if(selectedSkill.type === 'ego_atk') { pr.innerText = "Extermination"; pr.style.color = "var(--ego)"; return; }
     
-    // Cálculo de probabilidade simplificado para o texto de predição
     const chance = (p.sp + 50) / 100;
     const pExp = (selectedSkill.b || 0) + ((selectedSkill.p || 0) * (selectedSkill.c || 1) * chance);
     const eExp = curE.b + (curE.p * curE.c * 0.5);
@@ -266,9 +290,14 @@ async function startClash() {
 
     if(e.burn > 0) { e.hp -= e.burn; log(`BURN: -${e.burn} HP`); e.burn = Math.floor(e.burn * 0.7); }
     if(usedIdx !== -1) { activeHand[usedIdx] = fullDeck[deckPointer]; deckPointer = (deckPointer + 1) % fullDeck.length; }
+    
     selectedSkill = null; 
     if(e.hp <= 0) { alert("ABNORMALIDADE SUPRIMIDA!"); location.reload(); }
-    else { curE = abnoPool[Math.floor(Math.random() * abnoPool.length)]; updateStats(); }
+    else { 
+        curE = abnoPool[Math.floor(Math.random() * abnoPool.length)]; 
+        updateEnemyIntent(); // ATUALIZA A PRÓXIMA SKILL DA ABNO
+        updateStats(); 
+    }
 }
 
 async function flip(s, id, vid, sp, isEnemy) {
@@ -305,6 +334,8 @@ function updateStats() {
     renderUI(); updatePredict();
 }
 
+// INIT
+updateEnemyIntent();
 updateStats();
 </script>
 </body>
