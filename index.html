@@ -157,7 +157,7 @@ function startApp() {
 }
 
 // --- LOGICA DO JOGO ---
-const p = { hp: 300, max: 300, sp: 0, ego: 0 };
+const p = { hp: 300, max: 300, sp: 45, ego: 0 };
 const e = { hp: 1200, max: 1200, burn: 0, bleed: 0, sinking: 0 };
 let selectedSkill = null;
 let currentHandIdx = -1;
@@ -177,11 +177,11 @@ let activeHand = [fullDeck[0], fullDeck[1], fullDeck[2]];
 let deckPointer = 3;
 
 const specials = {
-    eva: { n: "EVASÃO", type: 'eva', b: 5, p: 12, c: 1 },
-    cnt: { n: "REVIDE", type: 'cnt', b: 8, p: 8, c: 1 },
-    def: { n: "ESCUDO", type: 'def', b: 12, p: 5, c: 1, spBonus: 10, egoBonus: 15 },
+    eva: { n: "Evade", type: 'eva', b: 5, p: 12, c: 1 },
+    cnt: { n: "Counter", type: 'cnt', b: 8, p: 8, c: 3 },
+    def: { n: "Guard", type: 'def', b: 10, p: 5, c: 2, spBonus: 15, egoBonus: 20 },
     ego: { n: "E.G.O", type: 'ego_atk' },
-    heal: { n: "REPARO", type: 'heal' }
+    heal: { n: "Heal Life", type: 'heal' }
 };
 
 // NIVELAMENTO DA ABNORMALIDADE
@@ -202,7 +202,7 @@ function updatePredict() {
     const btn = document.getElementById('clash-btn');
     if(!selectedSkill) { pr.innerText = "ESCOLHA UMA AÇÃO"; pr.style.color = "#444"; btn.style.display = 'none'; return; }
     btn.style.display = 'block';
-    if(selectedSkill.type === 'ego_atk') { pr.innerText = "SÍNCOPE"; pr.style.color = "var(--ego)"; return; }
+    if(selectedSkill.type === 'ego_atk') { pr.innerText = "Extermination"; pr.style.color = "var(--ego)"; return; }
     
     // Cálculo de probabilidade simplificado para o texto de predição
     const chance = (p.sp + 50) / 100;
@@ -256,7 +256,7 @@ async function startClash() {
         if(s.type === 'eva' && pv > ev) { p.sp = Math.min(45, p.sp+25); log("DESVIO PERFEITO!"); }
         else if(s.type === 'def') { 
             p.hp -= Math.max(0, ev - pv); p.sp = Math.min(45, p.sp + 10); p.ego = Math.min(100, p.ego + 15);
-            log(`ESCUDO ABSORVEU DANO`); 
+            log(`GUARDA PERFEITA!`); 
         } else if(pv > ev) { 
             let dmg = pv * (s.type === 'cnt' ? 4 : 3.5);
             if(s.st) { e[s.st] += s.val; if(s.st === 'sinking') { dmg += e.sinking; log("SINKING IMPACT!"); } }
