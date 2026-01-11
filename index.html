@@ -258,7 +258,7 @@ async function startClash() {
         await new Promise(r => setTimeout(r, 150));
         overlay.style.transition = 'opacity 0.8s ease-out'; overlay.style.opacity = '0';
         e.hp -= 500; 
-        setTimeout(() => document.body.classList.remove('shake'), 500);
+        setTimeout(() => document.body.classList.remove('shake'), 1000);
         log("E.G.O: EFFECTIVE DAMAGE!");
     } else if(s.type === 'heal') {
         if(p.ego >= 40) { p.ego -= 40; p.hp = Math.min(p.max, p.hp+60); p.sp = Math.min(45, p.sp+20); log("SISTEMA REPARADO"); }
