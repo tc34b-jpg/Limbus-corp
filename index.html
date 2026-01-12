@@ -7,7 +7,6 @@
         :root { 
             --bg: #050505; --card: #121214; --red: #ff4444; --blue: #4488ff; 
             --gold: #ffcc00; --ego: #00ffcc; --term: #1a1a1c; --eva: #00ff88; 
-            --burn: #ff8800; --bleed: #880000; --sinking: #4400ff; 
         }
         
         body { 
@@ -56,9 +55,6 @@
         .ego-flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--ego); opacity: 0; pointer-events: none; z-index: 2000; }
         .status-tray { display: flex; gap: 5px; margin-top: 8px; justify-content: flex-end; min-height: 20px; }
         .badge { padding: 2px 6px; border-radius: 3px; font-size: 9px; font-weight: bold; border: 1px solid transparent; }
-        .b-burn { background: rgba(255,136,0,0.1); border-color: var(--burn); color: var(--burn); }
-        .b-bleed { background: rgba(136,0,0,0.1); border-color: var(--bleed); color: var(--bleed); }
-        .b-sinking { background: rgba(68,0,255,0.1); border-color: var(--sinking); color: var(--sinking); }
         
         #sidebar { position: fixed; left: -310px; top: 0; width: 300px; height: 100%; background: rgba(10,10,10,0.98); border-right: 2px solid #333; transition: 0.3s; padding: 30px; z-index: 1000; }
         #sidebar.open { left: 0; border-color: var(--ego); }
@@ -68,7 +64,7 @@
         .card { background: var(--card); border: 2px solid #222; width: 250px; padding: 15px; border-radius: 12px; position: relative; }
         .bar-container { background: #000; height: 10px; border: 1px solid #333; margin: 6px 0; border-radius: 5px; overflow: hidden; }
         .bar-fill { height: 100%; transition: width 0.5s; }
-        .hp { background: var(--red); } .sp { background: var(--blue); } .ego-bar { background: var(--ego); box-shadow: 0 0 10px var(--ego); }
+        .hp { background: var(--red); } .sp { background: var(--blue); } .ego-bar { background: var(--ego); box-shadow: 0 0 10px var
         
         .prob-display { color: var(--gold); font-size: 10px; font-weight: bold; margin-top: 8px; border-top: 1px solid #222; padding-top: 5px; }
         .abno-container { position: relative; width: 200px; height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: abnoFloat 4s ease-in-out infinite; margin-bottom: 10px; }
@@ -112,7 +108,7 @@
     <h3 style="color:var(--ego)">Sistem</h3>
     <button class="menu-btn" onclick="selectSpecial('eva')"><b style="color:var(--eva)">Evade</b><br><small>+25 SP no desvio</small></button>
     <button class="menu-btn" onclick="selectSpecial('cnt')"><b style="color:var(--cnt)">Counter</b><br><small>Dano x4</small></button>
-    <button class="menu-btn" onclick="selectSpecial('def')"><b style="color:var(--def)">Guard</b><br><small>Reduz dano | +10 SP | +15% EGO</small></button>
+    <button class="menu-btn" onclick="selectSpecial('def')"><b style="color:var(--def)">Guard</b><br><small>Guard Damage | +10 SP | +15% EGO</small></button>
     <button id="heal-btn" class="menu-btn" onclick="selectSpecial('heal')"><b style="color:cyan">Repair</b><br><small>Cura HP/SP (40% EGO)</small></button>
     <button id="ego-menu-btn" class="menu-btn" style="color:var(--ego); border-color:var(--ego)" onclick="selectSpecial('ego')" disabled><b>Use E.G.O (100%)</b><br><small>Dano Massivo</small></button>
 </div>
@@ -163,17 +159,17 @@
 
 <script>
 const p = { hp: 300, max: 300, sp: 45, ego: 50 }; 
-const e = { hp: 5000, max: 5000, burn: 0, bleed: 0, sinking: 0 };
+const e = { hp: 5000, max: 5000 };
 let selectedSkill = null;
 let currentHandIdx = -1;
 
 const fullDeck = [
-    { n: "Thrice-Baked", b: 4, p: 4, c: 3, st: 'burn', val: 6 },
-    { n: "Mental Breakdown", b: 8, p: 6, c: 4, st: 'sinking', val: 30 },
-    { n: "Dual Laceration", b: 6, p: 5, c: 2, st: 'bleed', val: 8 },
-    { n: "Wildfire Burst", b: 20, p: 20, c: 1, st: 'burn', val: 20 },
-    { n: "Thrice-Cut Vein", b: 5, p: 3, c: 5, st: 'bleed', val: 5 },
-    { n: "Decimal Doom", b: 5, p: 3, c: 10, st: 'burn', val: 10 }
+    { n: "Thrice-Baked", b: 4, p: 4, c: 3 },
+    { n: "Mental Breakdown", b: 8, p: 6, c: 4 },
+    { n: "Dual Laceration", b: 6, p: 5, c: 2 },
+    { n: "Wildfire Burst", b: 20, p: 20, c: 1 },
+    { n: "Thrice-Cut Vein", b: 5, p: 3, c: 5 },
+    { n: "Decimal Doom", b: 5, p: 3, c: 10 }
 ];
 
 let activeHand = [fullDeck[0], fullDeck[1], fullDeck[2]];
