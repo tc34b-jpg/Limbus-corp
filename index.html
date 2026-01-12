@@ -184,7 +184,7 @@ let activeHand = [fullDeck[0], fullDeck[1], fullDeck[2]];
 let deckPointer = 3;
 
 const specials = {
-    eva: { n: "Evade", type: 'eva', b: 5, p: 12, c: 1 },
+    eva: { n: "Evade", type: 'eva', b: 5, p: 12, c: 2 },
     cnt: { n: "Counter", type: 'cnt', b: 8, p: 8, c: 3 },
     def: { n: "Guard", type: 'def', b: 10, p: 5, c: 2 },
     ego: { n: "E.G.O", type: 'ego_atk' },
@@ -225,6 +225,9 @@ function updatePredict() {
     if(!selectedSkill) { pr.innerText = "ESCOLHA UMA AÇÃO"; pr.style.color = "#444"; btn.style.display = 'none'; return; }
     btn.style.display = 'block';
     if(selectedSkill.type === 'ego_atk') { pr.innerText = "Extermination"; pr.style.color = "var(--ego)"; return; }
+    if(selectedSkill.type === 'def') { pr.innerText = "Perfect guard"; pr.style.color = "var(--ego)"; return; }
+    if(selectedSkill.type === 'eva') { pr.innerText = "Evade (sucess)"; pr.style.color = "var(--ego)"; return; }
+    if(selectedSkill.type === 'cnt') { pr.innerText = "Perfect Counter!"; pr.style.color = "var(--ego)"; return; }
     
     const chance = (p.sp + 50) / 100;
     const pExp = (selectedSkill.b || 0) + ((selectedSkill.p || 0) * (selectedSkill.c || 1) * chance);
