@@ -2,11 +2,12 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Limbus Corp - DANTE'S JUDGEMENT</title>
+    <title>ABYSSUS - DANTE'S JUDGEMENT</title>
     <style>
         :root { 
             --bg: #050505; --card: #121214; --red: #ff4444; --blue: #4488ff; 
             --gold: #ffcc00; --ego: #00ffcc; --term: #1a1a1c; --eva: #00ff88; 
+            --burn: #ff8800; --bleed: #880000; --sinking: #4400ff; 
         }
         
         body { 
@@ -38,8 +39,11 @@
         #e-skill-display {
             background: rgba(255, 0, 0, 0.1);
             border: 1px solid var(--red);
-            padding: 5px 10px; border-radius: 4px; margin-bottom: 10px;
-            text-align: center; min-width: 150px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            text-align: center;
+            min-width: 150px;
             box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
             animation: pulseRed 2s infinite;
         }
@@ -55,6 +59,9 @@
         .ego-flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--ego); opacity: 0; pointer-events: none; z-index: 2000; }
         .status-tray { display: flex; gap: 5px; margin-top: 8px; justify-content: flex-end; min-height: 20px; }
         .badge { padding: 2px 6px; border-radius: 3px; font-size: 9px; font-weight: bold; border: 1px solid transparent; }
+        .b-burn { background: rgba(255,136,0,0.1); border-color: var(--burn); color: var(--burn); }
+        .b-bleed { background: rgba(136,0,0,0.1); border-color: var(--bleed); color: var(--bleed); }
+        .b-sinking { background: rgba(68,0,255,0.1); border-color: var(--sinking); color: var(--sinking); }
         
         #sidebar { position: fixed; left: -310px; top: 0; width: 300px; height: 100%; background: rgba(10,10,10,0.98); border-right: 2px solid #333; transition: 0.3s; padding: 30px; z-index: 1000; }
         #sidebar.open { left: 0; border-color: var(--ego); }
@@ -64,7 +71,7 @@
         .card { background: var(--card); border: 2px solid #222; width: 250px; padding: 15px; border-radius: 12px; position: relative; }
         .bar-container { background: #000; height: 10px; border: 1px solid #333; margin: 6px 0; border-radius: 5px; overflow: hidden; }
         .bar-fill { height: 100%; transition: width 0.5s; }
-        .hp { background: var(--red); } .sp { background: var(--blue); } .ego-bar { background: var(--ego); box-shadow: 0 0 10px var
+        .hp { background: var(--red); } .sp { background: var(--blue); } .ego-bar { background: var(--ego); box-shadow: 0 0 10px var(--ego); }
         
         .prob-display { color: var(--gold); font-size: 10px; font-weight: bold; margin-top: 8px; border-top: 1px solid #222; padding-top: 5px; }
         .abno-container { position: relative; width: 200px; height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: abnoFloat 4s ease-in-out infinite; margin-bottom: 10px; }
@@ -74,7 +81,7 @@
         .abno-arm { position: absolute; width: 100px; height: 8px; background: repeating-linear-gradient(90deg, #333, #333 5px, #555 5px, #555 10px); top: 50px; border-radius: 5px; z-index: 1; }
         .arm-left { left: -60px; transform: rotate(-20deg); animation: armSwayL 3s ease-in-out infinite; }
         .arm-right { right: -60px; transform: rotate(20deg); animation: armSwayR 3s ease-in-out infinite; }
-        @keyframes abnoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .scale-plate { position: absolute; bottom: -20px; width: 40px; height: 4px; background: var(--gold); border-radius: 50%; box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3); }
 
         .clash-info { flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; }
         .prediction-box { font-weight: 900; font-size: 18px; margin-bottom: 5px; height: 25px; text-transform: uppercase; }
@@ -106,11 +113,11 @@
 <div id="sidebar">
     <button class="toggle-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">Monitor ❯</button>
     <h3 style="color:var(--ego)">Sistem</h3>
-    <button class="menu-btn" onclick="selectSpecial('eva')"><b style="color:var(--eva)">Evade</b><br><small>+25 SP no desvio</small></button>
-    <button class="menu-btn" onclick="selectSpecial('cnt')"><b style="color:var(--cnt)">Counter</b><br><small>Dano x4</small></button>
-    <button class="menu-btn" onclick="selectSpecial('def')"><b style="color:var(--def)">Guard</b><br><small>Guard Damage | +10 SP | +15% EGO</small></button>
-    <button id="heal-btn" class="menu-btn" onclick="selectSpecial('heal')"><b style="color:cyan">Repair</b><br><small>Cura HP/SP (40% EGO)</small></button>
-    <button id="ego-menu-btn" class="menu-btn" style="color:var(--ego); border-color:var(--ego)" onclick="selectSpecial('ego')" disabled><b>Use E.G.O (100%)</b><br><small>Dano Massivo</small></button>
+    <button class="menu-btn" onclick="selectSpecial('eva')"><b style="color:var(--eva)">Evade</b><br><small>Add Sp for sucesfully</small></button>
+    <button class="menu-btn" onclick="selectSpecial('cnt')"><b style="color:var(--cnt)">Counter</b><br><small>Multiplicador x4</small></button>
+    <button class="menu-btn" onclick="selectSpecial('def')"><b style="color:var(--def)">Guard made for tech</b><br><small style="color:var(--ego)">+10 SP | +15% EGO</small></button>
+    <button id="heal-btn" class="menu-btn" onclick="selectSpecial('heal')"><b style="color:cyan">Repair of control</b><br><small>Cost: 40% EGO power</small></button>
+    <button id="ego-menu-btn" class="menu-btn" style="color:var(--ego); border-color:var(--ego)" onclick="selectSpecial('ego')" disabled><b>Use E.G.O (100%)</b><br><small>Loss 50% of your SP</small></button>
 </div>
 
 <div class="arena">
@@ -124,10 +131,10 @@
     </div>
 
     <div class="clash-info">
-        <div id="prediction" class="prediction-box" style="color:#444">Wait...</div>
+        <div id="prediction" class="prediction-box" style="color:#444">AGUARDANDO...</div>
         <div style="display:flex; align-items:center; gap:30px">
             <div><span id="p-v" class="val-main" style="color:var(--blue)">0</span><div class="coin-row" id="p-coins"></div></div>
-            <button id="clash-btn" onclick="startClash()" style="display:none; padding:12px 30px; background:var(--gold); border:none; font-weight:bold; cursor:pointer; border-radius:4px;">Clashar</button>
+            <button id="clash-btn" onclick="startClash()" style="display:none; padding:12px 30px; background:var(--gold); border:none; font-weight:bold; cursor:pointer; border-radius:4px;">CLashar</button>
             <div id="vs-text" style="font-size:25px; font-weight:900; color:#222">VS</div>
             <div><span id="e-v" class="val-main" style="color:var(--red)">0</span><div class="coin-row" id="e-coins"></div></div>
         </div>
@@ -136,18 +143,18 @@
 
     <div style="display:flex; flex-direction:column; align-items:center">
         <div id="e-skill-display">
-            <small style="color:rgba(255,255,255,0.5)">Enemy attack:</small><br>
+            <small style="color:rgba(255,255,255,0.5)">INTENÇÃO:</small><br>
             <b id="e-skill-name" style="color:var(--red)">---</b><br>
             <span id="e-skill-power" style="font-size:10px">0 + 0 [x0]</span>
         </div>
 
         <div class="abno-container">
-            <div class="abno-arm arm-left"></div>
-            <div class="abno-arm arm-right"></div>
+            <div class="abno-arm arm-left"><div class="scale-plate"></div></div>
+            <div class="abno-arm arm-right"><div class="scale-plate"></div></div>
             <div class="abno-body"><div class="abno-eye-socket"><div class="abno-pupil"></div></div></div>
         </div>
         <div class="card">
-            <b style="color:var(--red)">The Sinner-Eater (ALEPH)</b>
+            <b style="color:var(--red)">The Sinners-Eater’s (ALEPH)</b>
             <div class="bar-container"><div id="e-hp" class="bar-fill hp" style="width:100%"></div></div>
             <div class="status-tray" id="e-status"></div>
             <div style="font-size:10px; color:#888">HP: <span id="e-hp-val">5000</span></div>
@@ -158,44 +165,47 @@
 <div class="skills-container" id="main-skills"></div>
 
 <script>
-const p = { hp: 300, max: 300, sp: 45, ego: 50 }; 
-const e = { hp: 5000, max: 5000 };
+const p = { hp: 300, max: 300, sp: 45, ego: 1 };
+const e = { hp: 5000, max: 5000, burn: 0, bleed: 0, sinking: 0 };
 let selectedSkill = null;
 let currentHandIdx = -1;
 
 const fullDeck = [
-    { n: "Thrice-Baked", b: 4, p: 4, c: 3 },
-    { n: "Mental Breakdown", b: 8, p: 6, c: 4 },
-    { n: "Dual Laceration", b: 6, p: 5, c: 2 },
-    { n: "Wildfire Burst", b: 20, p: 20, c: 1 },
-    { n: "Thrice-Cut Vein", b: 5, p: 3, c: 5 },
-    { n: "Decimal Doom", b: 5, p: 3, c: 10 }
+    { n: "Thrice-Baked", b: 4, p: 4, c: 3, st: 'burn', val: 6 },
+    { n: "Dual Laceration", b: 6, p: 5, c: 2, st: 'bleed', val: 8 },
+    { n: "Abyssal Quad-Step", b: 3, p: 3, c: 4, st: 'sinking', val: 10 },
+    { n: "Wildfire Burst", b: 20, p: 10, c: 1, st: 'burn', val: 20 },
+    { n: "Thrice-Cut Vein", b: 5, p: 3, c: 3, st: 'bleed', val: 5 },
+    { n: "Mental Breakdown", b: 8, p: 6, c: 4, st: 'sinking', val: 30 }
 ];
 
 let activeHand = [fullDeck[0], fullDeck[1], fullDeck[2]];
 let deckPointer = 3;
-// habilidades especiais
+
 const specials = {
     eva: { n: "Evade", type: 'eva', b: 5, p: 12, c: 1 },
-    cnt: { n: "Counter", type: 'cnt', b: 10, p: 8, c: 3 },
-    def: { n: "Guard", type: 'def', b: 10, p: 10, c: 3 },
-    ego: { n: "E.G.O", type: 'ego_atk', b:50, p:10, c:5 },
-    heal: { n: "Heal", type: 'heal' }
+    cnt: { n: "Counter", type: 'cnt', b: 8, p: 8, c: 3 },
+    def: { n: "Guard", type: 'def', b: 10, p: 5, c: 2 },
+    ego: { n: "E.G.O", type: 'ego_atk' },
+    heal: { n: "Heal Life", type: 'heal' }
 };
 
 const abnoPool = [
-    { n: "Sentence of Sins", b: 6, p: 6, c: 2 },
-    { n: "Punishment", b: 8, p: 4, c: 2 },
-    { n: "The Last Confession", b: 4, p: 4, c: 10 }
+    { n: "Setence of yours sins", b: 6, p: 6, c: 2 },
+    { n: "Punishment of your bad life", b: 8, p: 4, c: 2 },
+    { n: "The Last Confession", b: 4, p: 2, c: 8 }
 ];
 let curE = abnoPool[0];
 
+// LOGICA DE INTRO
 setTimeout(() => {
     document.getElementById('intro-loader').style.display = 'none';
     document.getElementById('intro-btn').style.display = 'block';
 }, 2000);
 
-function startApp() { document.getElementById('intro-overlay').style.transform = 'translateY(-100%)'; }
+function startApp() {
+    document.getElementById('intro-overlay').style.transform = 'translateY(-100%)';
+}
 
 function log(m) {
     const l = document.getElementById('log-content');
@@ -210,7 +220,7 @@ function updateEnemyIntent() {
 function updatePredict() {
     const pr = document.getElementById('prediction');
     const btn = document.getElementById('clash-btn');
-    if(!selectedSkill) { pr.innerText = "Escolha Ação"; pr.style.color = "#444"; btn.style.display = 'none'; return; }
+    if(!selectedSkill) { pr.innerText = "ESCOLHA UMA AÇÃO"; pr.style.color = "#444"; btn.style.display = 'none'; return; }
     btn.style.display = 'block';
     if(selectedSkill.type === 'ego_atk') { pr.innerText = "Extermination"; pr.style.color = "var(--ego)"; return; }
     
@@ -219,9 +229,15 @@ function updatePredict() {
     const eExp = curE.b + (curE.p * curE.c * 0.5);
     const diff = pExp - eExp;
     
-    if(diff > 4) { pr.innerText = "Dominat"; pr.style.color = "var(--eva)"; }
-    else if(diff < -2) { pr.innerText = "Struggling"; pr.style.color = "var(--red)"; }
-    else { pr.innerText = "Neutral"; pr.style.color = "var(--gold)"; }
+    if(diff > 4) { 
+        pr.innerText = "DOMINANTE"; pr.style.color = "var(--eva)"; 
+    } else if(diff < -2) { 
+        pr.innerText = "ARRISCADO"; pr.style.color = "var(--red)"; 
+    } else if(Math.abs(diff) < 0.1) { 
+        pr.innerText = "IMPASSE TOTAL"; pr.style.color = "#ff8800"; 
+    } else { 
+        pr.innerText = "EQUILIBRADO"; pr.style.color = "var(--gold)"; 
+    }
 }
 
 function selectSpecial(key) {
@@ -234,7 +250,7 @@ function renderUI() {
     const mDiv = document.getElementById('main-skills'); mDiv.innerHTML = '';
     activeHand.forEach((s, idx) => {
         const btn = document.createElement('button');
-        btn.className = 's-btn' + (currentHandIdx === idx ? ' selected' : '');
+        btn.className = 's-btn' + (selectedSkill === s ? ' selected' : '');
         let stColor = s.st === 'burn' ? 'var(--burn)' : s.st === 'bleed' ? 'var(--red)' : 'var(--sinking)';
         btn.innerHTML = `<small style="color:${stColor}">${s.st.toUpperCase()}</small><br><b>${s.n}</b><br>${s.b}+${s.p}[x${s.c}]`;
         btn.onclick = () => { selectedSkill = s; currentHandIdx = idx; renderUI(); updatePredict(); };
@@ -250,40 +266,38 @@ async function startClash() {
         const overlay = document.getElementById('ego-flash-overlay');
         document.body.classList.add('shake');
         overlay.style.transition = 'none'; overlay.style.opacity = '0.8';
-        p.sp -= 25; p.ego = 0;
+        p.sp = Math.floor(p.sp / 2);
         await new Promise(r => setTimeout(r, 150));
         overlay.style.transition = 'opacity 0.8s ease-out'; overlay.style.opacity = '0';
-        e.hp -= 500; 
-        setTimeout(() => document.body.classList.remove('shake'), 1000);
-        log("E.G.O: EFFECTIVE DAMAGE!");
+        e.hp -= 400; p.ego = 0;
+        setTimeout(() => document.body.classList.remove('shake'), 500);
+        log("E.G.O: DANO MASSIVO!");
     } else if(s.type === 'heal') {
         if(p.ego >= 40) { p.ego -= 40; p.hp = Math.min(p.max, p.hp+60); p.sp = Math.min(45, p.sp+20); log("SISTEMA REPARADO"); }
-        else { log("EGO INSUFICIENTE!"); }
     } else {
         const pv = await flip(s, 'p-coins', 'p-v', p.sp, false);
         const ev = await flip(curE, 'e-coins', 'e-v', 0, true);
         
         if(s.type === 'eva' && pv > ev) { p.sp = Math.min(45, p.sp+25); log("DESVIO PERFEITO!"); }
         else if(s.type === 'def') { 
-            let finalDmg = Math.max(0, ev - pv); p.hp -= finalDmg; p.sp = Math.min(45, p.sp + 10); p.ego = Math.min(100, p.ego + 15);
-            log(`Perfect Guard! Dano: ${finalDmg}`); 
+            p.hp -= Math.max(0, ev - pv); p.sp = Math.min(45, p.sp + 10); p.ego = Math.min(100, p.ego + 15);
+            log(`GUARDA PERFEITA!`); 
         } else if(pv > ev) { 
             let dmg = pv * (s.type === 'cnt' ? 4 : 3.5);
-            if(s.st) { e[s.st] += s.val; }
-            e.hp -= dmg; p.sp = Math.min(45, p.sp + 20); p.ego = Math.min(100, p.ego + 35); log(`VITÓRIA! DANO: ${Math.floor(dmg)}`);
-        } else { p.hp -= ev; p.sp = Math.max(-45, p.sp - 25); log("DERROTA! DANO SOFRIDO!"); }
+            if(s.st) { e[s.st] += s.val; if(s.st === 'sinking') { dmg += e.sinking; log("SINKING IMPACT!"); } }
+            e.hp -= dmg; p.sp = Math.min(45, p.sp + 20); p.ego = Math.min(100, p.ego + 35); log(`DANO: ${Math.floor(dmg)}`);
+        } else { p.hp -= ev; p.sp = Math.max(-45, p.sp - 25); log("DANO SOFRIDO!"); }
     }
 
-    if(usedIdx !== -1) { 
-        activeHand[usedIdx] = fullDeck[deckPointer]; 
-        deckPointer = (deckPointer + 1) % fullDeck.length; 
-    }
+    if(e.burn > 0) { e.hp -= e.burn; log(`BURN: -${e.burn} HP`); e.burn = Math.floor(e.burn * 0.7); }
+    if(usedIdx !== -1) { activeHand[usedIdx] = fullDeck[deckPointer]; deckPointer = (deckPointer + 1) % fullDeck.length; }
     
-    selectedSkill = null; currentHandIdx = -1;
-    if(e.hp <= 0) { alert("ABNORMALIDADE DEFFEATED!"); location.reload(); }
+    selectedSkill = null; 
+    if(e.hp <= 0) { alert("ABNORMALIDADE SUPRIMIDA!"); location.reload(); }
     else { 
         curE = abnoPool[Math.floor(Math.random() * abnoPool.length)]; 
-        updateEnemyIntent(); updateStats(); 
+        updateEnemyIntent();
+        updateStats(); 
     }
 }
 
@@ -292,6 +306,7 @@ async function flip(s, id, vid, sp, isEnemy) {
     cont.innerHTML = ''; let power = s.b || 0; vdis.innerText = power;
     for(let i=0; i<(s.c||1); i++) {
         const c = document.createElement('div'); c.className = 'coin show flipping'; cont.appendChild(c);
+        if(isEnemy && e.bleed > 0) { e.hp -= e.bleed; log(`BLEED: Inimigo sangrou ${e.bleed}!`); }
         await new Promise(r => setTimeout(r, 400)); c.classList.remove('flipping');
         if(Math.random() < (sp+50)/100) { c.classList.add('heads'); power += s.p; }
         else c.classList.add('tails');
@@ -311,6 +326,12 @@ function updateStats() {
     document.getElementById('e-hp').style.width = (e.hp/e.max*100)+'%';
     document.getElementById('e-hp-val').innerText = Math.ceil(e.hp);
     document.getElementById('ego-menu-btn').disabled = p.ego < 100;
+    
+    const tray = document.getElementById('e-status'); tray.innerHTML = '';
+    if(e.burn > 0) tray.innerHTML += `<div class="badge b-burn">BURN:${e.burn}</div>`;
+    if(e.bleed > 0) tray.innerHTML += `<div class="badge b-bleed">BLEED:${e.bleed}</div>`;
+    if(e.sinking > 0) tray.innerHTML += `<div class="badge b-sinking">SINKING:${e.sinking}</div>`;
+
     renderUI(); updatePredict();
 }
 
