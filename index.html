@@ -270,7 +270,7 @@ async function startClash() {
         p.sp = Math.floor(p.sp / 2);
         await new Promise(r => setTimeout(r, 150));
         overlay.style.transition = 'opacity 0.8s ease-out'; overlay.style.opacity = '0';
-        e.hp -= 400; p.ego = 0;
+        e.hp -= 1000; p.ego = 0;
         setTimeout(() => document.body.classList.remove('shake'), 500);
         log("E.G.O: DANO MASSIVO!");
     } else if(s.type === 'heal') {
